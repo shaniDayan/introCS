@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+/*השאלה
+נתון מערך באורן אן של מספרים שלמים חיובים והמספר איקס
+הבעיה: לבדוק האם יש תת קבוצה של מספרים במערך שסכומה איקס ללא שימוש באותו איבר פעמיים
+השאלה נבנת לאט לאט ליותר מסובכת
+*/
+
+int main(){
+    return 0;
+}
+//מעטפת
+bool isSubSum(int arr[], int n, int x){
+  int index = 0;
+  int sum_num = 0;
+  int *sol = n+1;
+  int arr_help[] = malloc(n*sizeof(int));
+  int arr_sol[] = malloc(n*sizeof(int));
+  void reqIsSubSum_4(arr,n,x,index,sum_num ,sol, help_arr, arr_sol);
+
+}
+
+bool reqIsSubSum(int arr[], int n, int x, int index, int sum_num, int* sol){
+    if(x==0) {// we got to the end or x was first zero
+        *sol = sum_num; // to know how many numbers we used for the sum
+        return true;
+    }
+    if(index >= n ) // we strat at zero
+        return false;// we got to the end and we dont have a sum to x
+    if(x < 0){ 
+        return false;
+    }
+    // we use the number for the sum 
+    if(reqIsSubSum(arr, n, x - arr[index], index +1, sum_num++,sol)) return true;  
+    // not take
+    return (reqIsSubSum(arr, n, x, index +1, sum_num++,sol));
+}
+/*visual*/
+/*how many solution we get for sum x*/
+void reqIsSubSum_2(int arr[], int n, int x, int index, int* sol){
+    if(x==0) {// we got to the end or x was first zero
+        *sol++; // to know how many numbers we used for the sum
+        return;
+    }
+    if(index >= n ) // we strat at zero
+        return;// we got to the end and we dont have a sum to x
+    if(x < 0){ 
+        return;
+    }
+    // we do both recursive to know how many solution we have
+    // we use the number for the sum 
+    reqIsSubSum_2(arr, n, x - arr[index], index +1,sol);  
+    // not take
+    reqIsSubSum_2(arr, n, x, index +1,sol);
+}
+/*what is the best solution that we can get for sum x*/
+void reqIsSubSum_3(int arr[], int n, int x, int index,int sum_num ,int* sol){
+    if(x==0) {// we got to the end or x was first zero
+       if (*sol > sum_num){
+        *sol = sum_num;
+       }
+       return true;
+    }
+    if(index >= n ) // we strat at zero
+        return;// we got to the end and we dont have a sum to x
+    if(x < 0 || *sol >= sum_num){ 
+        return;
+    }
+    // we do both recursive to know how many solution we have
+    // we use the number for the sum 
+    reqIsSubSum_3(arr, n, x - arr[index], index +1, sum_num++,sol);  
+    // not take
+    reqIsSubSum_3(arr, n, x, index +1, sum_num++,sol);
+}
+// what are the numbers for the best solution we van get for sum
+void reqIsSubSum_4(int arr[], int n, int x, int index,int sum_num ,int* sol, int help_arr[], int sol_arr[]){
+    if(x==0) {// we got to the end or x was first zero
+       if (*sol > sum_num){
+        *sol = sum_num;
+
+       }
+       return true;
+    }
+    if(index >= n ) // we strat at zero
+        return;// we got to the end and we dont have a sum to x
+    if(x < 0 || *sol >= sum_num){ 
+        return;
+    }
+    help_arr[index] = 1; // 1 for the place of the index of the number we used
+    // we do both recursive to know how many solution we have
+    // we use the number for the sum 
+    reqIsSubSum_4(arr, n, x - arr[index], index +1, sum_num++,sol, help_arr, sol_arr);  
+    help_arr[index] = 0;
+    // not take
+    reqIsSubSum_4(arr, n, x, index +1, sum_num++,sol,help_arr, sol_arr);
+}
